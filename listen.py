@@ -1,8 +1,7 @@
 import configparser, os
 from playsound import playsound
 from pynput.keyboard import Key, Listener, KeyCode
-import time
-import asyncio
+import time, subprocess as sp
 
 SOUNDPREFIX = 'sounds/'
 DELAY = 0.2
@@ -10,6 +9,9 @@ DELAY = 0.2
 config = configparser.ConfigParser()
 config.read('keybinds.ini')
 print()
+
+def playsound(sound, _):
+    sp.Popen(['aplay',sound])
 
 
 def on_press(key: KeyCode):
