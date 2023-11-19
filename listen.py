@@ -1,15 +1,25 @@
 import configparser, os
 from playsound import playsound
 from pynput.keyboard import Key, Listener, KeyCode
+import time
+import asyncio
 
 SOUNDPREFIX = 'sounds/'
+DELAY = 0.2
 
 config = configparser.ConfigParser()
 config.read('keybinds.ini')
+print()
 
 
 def on_press(key: KeyCode):
+    
     # print a spacer
+    print()
+    global last_sound_time
+    # don't play sound if last sound more recent than DELAY
+    if (time.time() - last_sound_time) < DELAY:
+        return
     print()
     # stop listening if escape pressed
     if key == Key.esc:
@@ -33,6 +43,9 @@ def on_press(key: KeyCode):
     print(sound)
     # play sound asnychronously
     playsound(SOUNDPREFIX + sound, False)
+    # record time to prevent spam
+    last_sound_time = time.time()
+last_sound_time = 0
 
 # Collect events until released
 with Listener(on_press=on_press) as listener:
